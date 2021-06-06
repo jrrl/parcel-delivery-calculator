@@ -18,14 +18,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class DeliveryCostCalculator {
-	private static final Logger logger = LoggerFactory.getLogger(DeliveryCostCalculator.class);
+public class DeliveryCostCalculatorServiceImpl implements DeliveryCostCalculatorService {
+	private static final Logger logger = LoggerFactory.getLogger(DeliveryCostCalculatorServiceImpl.class);
 
 	private final List<Rule> rules;
 	private final VoucherRepo voucherRepo;
 	private final Validator validator;
 
-	public DeliveryCostCalculator(List<Rule> rules, VoucherRepo voucherRepo, Validator validator) {
+	public DeliveryCostCalculatorServiceImpl(List<Rule> rules, VoucherRepo voucherRepo, Validator validator) {
 		this.rules = rules;
 		this.voucherRepo = voucherRepo;
 		this.validator = validator;
@@ -48,11 +48,11 @@ public class DeliveryCostCalculator {
 		return costBuilder.build();
 	}
 
-	Rule findApplicableRule(Parcel parcel) throws InvalidParcelException{
+	Rule findApplicableRule(Parcel parcel) throws InvalidParcelException {
 		return rules.stream()
 		     .filter(rule -> rule.isEnabled() && rule.isApplicable(parcel))
 		     .min(Rule::compareTo)
-		     .orElseThrow(() -> new InvalidParcelException(""));
+		     .orElseThrow(() -> new InvalidParcelException("No applicable rules found"));
 	}
 
 	Voucher findVoucher(String voucherCode) {
