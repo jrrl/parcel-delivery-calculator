@@ -19,7 +19,7 @@ class RejectRule extends AbstractRule {
 
 	@Override
 	public boolean isSuccess() {
-		return true;
+		return false;
 	}
 
 	@Override
