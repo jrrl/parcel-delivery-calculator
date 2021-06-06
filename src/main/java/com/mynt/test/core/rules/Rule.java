@@ -1,10 +1,10 @@
 package com.mynt.test.core.rules;
 
-import com.mynt.test.Parcel;
+import com.mynt.test.core.parcel.Parcel;
 
 import java.math.BigDecimal;
 
-public interface Rule {
+public interface Rule extends Comparable<Rule> {
 	/**
 	 * States whether this rule leads to a success or reject state
 	 * @return true if it leads to a success state, false for reject states
