@@ -61,7 +61,6 @@ public class VoucherRepoImpl implements VoucherRepo {
 	}
 
 	private static class VoucherErrorHandler implements ResponseErrorHandler {
-
 		@Override
 		public boolean hasError(ClientHttpResponse response) throws IOException {
 			return response.getStatusCode().is5xxServerError() ||
