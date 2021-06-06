@@ -1,4 +1,4 @@
-package com.mynt.test;
+package com.mynt.test.core.parcel;
 
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
