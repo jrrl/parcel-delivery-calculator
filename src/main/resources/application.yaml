@@ -1,1 +1,43 @@
+logging:
+  level:
+    reactor.netty.http.client: debug
 
+spring:
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true
+      allow-coercion-of-scalars: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+jasypt:
+  encryptor:
+    password: myntpassword1
+
+rule:
+  reject:
+    priority: 1
+    limit: 50
+  heavyParcel:
+    priority: 2
+    limit: 10
+    cost: 20
+  smallParcel:
+    priority: 3
+    limit: 1500
+    cost: 0.03
+  mediumParcel:
+    priority: 4
+    limit: 2500
+    cost: 0.04
+  largeParcel:
+    priority: 5
+    cost: 0.05
+
+voucher:
+  host: mynt-exam.mocklab.io
+  port: 443
+  protocol: https
+  basePath: /voucher
+  getVoucherPath: /{voucherCode}
+  apikey: apikey
