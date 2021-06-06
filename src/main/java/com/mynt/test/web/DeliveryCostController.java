@@ -1,11 +1,11 @@
 package com.mynt.test.web;
 
-import com.mynt.test.core.CostDetails;
-import com.mynt.test.core.DeliveryCostCalculator;
+import com.mynt.test.core.costcalculator.CostDetails;
+import com.mynt.test.core.costcalculator.DeliveryCostCalculator;
 import com.mynt.test.core.parcel.InvalidParcelException;
 import com.mynt.test.core.parcel.Parcel;
 import com.mynt.test.core.rules.InapplicableRuleException;
-import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,5 +26,10 @@ public class DeliveryCostController {
 	                                   @RequestParam(required = false) String voucherCode) throws InvalidParcelException, InapplicableRuleException {
 		Parcel parcel = new Parcel(weight, height, length, width);
 		return costCalculator.calculateCost(parcel, voucherCode);
+	}
+
+	@ExceptionHandler
+	public ResponseEntity<ErrorResponse> handleRejectError(InvalidParcelException invalidParcelException) {
+		return ResponseEntity.badRequest().body(new ErrorResponse(invalidParcelException.getMessage()));
 	}
 }
