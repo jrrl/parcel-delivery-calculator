@@ -20,6 +20,7 @@ dependencies {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
 	testImplementation("io.projectreactor:reactor-test")
+	testImplementation("com.github.tomakehurst:wiremock-jre8:2.28.0")
 }
 
 tasks.withType<Test> {
