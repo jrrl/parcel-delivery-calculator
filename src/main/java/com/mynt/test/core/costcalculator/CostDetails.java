@@ -37,7 +37,7 @@ public class CostDetails {
 		private BigDecimal calculatedCost;
 		private Voucher voucher;
 
-		Builder calculatedCost(BigDecimal calculatedCost) {
+		public Builder calculatedCost(BigDecimal calculatedCost) {
 			this.calculatedCost = calculatedCost;
 			return this;
 		}
