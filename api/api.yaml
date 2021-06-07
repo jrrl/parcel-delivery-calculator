@@ -1,0 +1,166 @@
+openapi: 3.1.0
+info:
+  title: parcel-delivery-calculator
+  version: '1.0'
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /delivery/cost:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostEstimate'
+              examples:
+                No voucher:
+                  value:
+                    calculatedCost: 100
+                    voucher: null
+                    totalCost: 100
+                Invalid voucher:
+                  value:
+                    calculatedCost: 100
+                    voucher:
+                      discount: 0
+                      expiry: null
+                      isApplied: false
+                      errorMessage: Invalid code
+                    totalCost: 100
+                Expired voucher:
+                  value:
+                    calculatedCost: 100
+                    voucher:
+                      discount: 10
+                      expiry: '2020-10-15'
+                      isApplied: false
+                      errorMessage: Voucher has already expired
+                    totalCost: 100
+                Valid voucher:
+                  value:
+                    calculatedCost: 100
+                    voucher:
+                      discount: 10
+                      expiry: '3000-10-15'
+                      isApplied: true
+                      errorMessage: null
+                    totalCost: 90
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid parcel:
+                  value:
+                    error: Invalid parcel
+        '500':
+          description: Internal Server Error
+      operationId: get-delivery-cost
+      parameters:
+        - $ref: '#/components/parameters/width_queryParam'
+        - $ref: '#/components/parameters/height_queryParam'
+        - $ref: '#/components/parameters/length_queryParam'
+        - $ref: '#/components/parameters/weight_queryParam'
+        - $ref: '#/components/parameters/voucherCode_queryParam'
+      description: ''
+components:
+  schemas:
+    CostEstimate:
+      title: CostEstimate
+      type: object
+      x-examples: {}
+      properties:
+        calculatedCost:
+          type: number
+          exclusiveMinimum: 0
+        voucher:
+          $ref: '#/components/schemas/VoucherDetails'
+        totalCost:
+          type: number
+          exclusiveMinimum: 0
+      required:
+        - calculatedCost
+        - totalCost
+    VoucherDetails:
+      title: DiscountDetails
+      type:
+        - object
+        - 'null'
+      properties:
+        discount:
+          type: number
+          default: 0
+          minimum: 0
+        errorMessage:
+          type:
+            - string
+            - 'null'
+          example: Voucher code MYNT not applicable
+        expiry:
+          type:
+            - string
+            - 'null'
+          format: date
+        isApplied:
+          type: boolean
+      required:
+        - discount
+    Error:
+      title: Error
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+  parameters:
+    width_queryParam:
+      name: width_queryParam
+      in: query
+      required: true
+      schema:
+        type: number
+        exclusiveMinimum: true
+        minimum: 0
+      description: 'Width of the parcel in cm '
+    height_queryParam:
+      name: height_queryParam
+      in: query
+      required: true
+      schema:
+        type: number
+        exclusiveMinimum: true
+        minimum: 0
+      description: Height of the parcel in cm
+    length_queryParam:
+      name: length_queryParam
+      in: query
+      required: true
+      schema:
+        type: number
+        minimum: 0
+        exclusiveMinimum: true
+      description: 'Length of the parcel in cm '
+    weight_queryParam:
+      name: weight_queryParam
+      in: query
+      required: true
+      schema:
+        type: number
+        exclusiveMinimum: true
+        minimum: 0
+      description: Weight of the parcel in kg
+    voucherCode_queryParam:
+      name: voucherCode_queryParam
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Voucher code for discount
+  responses: {}
