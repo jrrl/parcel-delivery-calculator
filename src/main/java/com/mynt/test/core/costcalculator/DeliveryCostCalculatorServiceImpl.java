@@ -10,9 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -69,5 +71,16 @@ public class DeliveryCostCalculatorServiceImpl implements DeliveryCostCalculator
 			voucher = voucher.withErrorMessage(errorMessage);
 		}
 		return voucher;
+	}
+
+	@PostConstruct
+	public void init() {
+		Set<Integer> prioritySet = new HashSet<>();
+		long duplicates = rules.stream()
+			.filter(rule -> !prioritySet.add(rule.getPriority()))
+			.count();
+		if(duplicates > 0) {
+			throw new ExceptionInInitializerError("Invalid rule config");
+		}
 	}
 }
