@@ -27,6 +27,6 @@ class HeavyParcelRule extends AbstractRule {
 
 	@Override
 	BigDecimal calculate(Parcel parcel) {
-		return parcel.getVolume().multiply(cost);
+		return cost.multiply(BigDecimal.valueOf(parcel.getWeight()));
 	}
 }
